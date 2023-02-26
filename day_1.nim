@@ -20,7 +20,7 @@ proc solve_first_part() =
             continue
 
         let food_amount = parseInt(line)
-        current_total += food_amount
+        inc current_total, food_amount
 
     echo "The answer for the first part is: ", current_max
 
@@ -44,7 +44,7 @@ proc solve_second_part() =
             continue
 
         let food_amount = parseInt(line)
-        current_total += food_amount
+        inc current_total, food_amount
 
     let top_three_sum = sum(current_top_three)
     echo "The answer for the second part is: ", top_three_sum
