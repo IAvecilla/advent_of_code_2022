@@ -50,38 +50,31 @@ proc decide_option(adversary_election: AdversaryChoice,
     else:
         return PlayerChoice.Rock
 
-proc solve_first_part() =
+proc solve*() =
     let file = open("inputs/input2.txt")
     defer: file.close()
 
     var line: string
-    var total_points: int = 0
+    var
+        total_point_first_part: int = 0
+        total_point_second_part: int = 0
+
     while file.read_line(line):
         let round_elections = split(line)
         let adversary_election = parseEnum[AdversaryChoice](round_elections[0])
         let player_election = parseEnum[PlayerChoice](round_elections[1])
+        let expected_round_result = parseEnum[RoundResult](round_elections[1])
+        let player_election_for_expected_result: PlayerChoice = decide_option(
+                adversary_election, expected_round_result)
         let points_for_round: int = calculate_points_by_round_result(
                 adversary_election, player_election)
-        inc total_points, points_for_round
-        inc total_points, ord(player_election)
+        inc total_point_first_part, points_for_round
+        inc total_point_second_part, ord(expected_round_result) * 3
+        inc total_point_first_part, ord(player_election)
+        inc total_point_second_part, ord(player_election_for_expected_result)
 
-    echo "The answer for the first part is: ", total_points
+    echo "The answer for the first part is: ", total_point_first_part
+    echo "The answer for the second part is: ", total_point_second_part
 
-proc solve_second_part() =
-    let file = open("inputs/input2.txt")
-    defer: file.close()
-
-    var line: string
-    var total_points: int = 0
-    while file.read_line(line):
-        let round_elections = split(line)
-        let adversary_election = parseEnum[AdversaryChoice](round_elections[0])
-        let expected_round_result = parseEnum[RoundResult](round_elections[1])
-        let player_election: PlayerChoice = decide_option(adversary_election, expected_round_result)
-        inc total_points, ord(expected_round_result) * 3
-        inc total_points, ord(player_election)
-
-    echo "The answer for the first part is: ", total_points
-
-solve_first_part()
-solve_second_part()
+if isMainModule:
+    solve()

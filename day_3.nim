@@ -1,13 +1,15 @@
 import sequtils
 import strutils
 
-proc solve_first_part() =
+proc solve*() =
     let file = open("inputs/input3.txt")
     defer: file.close()
 
     var
         line: string
-        total_priority: int
+        total_priority_first_part, total_priority_second_part: int
+        elves_group: seq[string]
+
     while file.read_line(line):
         let
             items_count = line.len()
@@ -16,22 +18,10 @@ proc solve_first_part() =
             shared_item = first_compartiment.filterIt(
                     second_compartiment.contains(it))[0]
         if shared_item.isUpperAscii():
-            inc total_priority, ord(shared_item) - ord('A') + 27
+            inc total_priority_first_part, ord(shared_item) - ord('A') + 27
         else:
-            inc total_priority, ord(shared_item) - ord('a') + 1
+            inc total_priority_first_part, ord(shared_item) - ord('a') + 1
 
-    echo "The answer for the first part is: ", total_priority
-
-proc solve_second_part() =
-    let file = open("inputs/input3.txt")
-    defer: file.close()
-
-    var
-        line: string
-        elves_group: seq[string]
-        total_priority: int
-
-    while file.read_line(line):
         elves_group.add(line)
         if elves_group.len() != 3:
             continue
@@ -48,15 +38,15 @@ proc solve_second_part() =
             continue
 
         if group_badge[0].isUpperAscii():
-            inc total_priority, ord(group_badge[0]) - ord('A') + 27
+            inc total_priority_second_part, ord(group_badge[0]) - ord('A') + 27
         else:
-            inc total_priority, ord(group_badge[0]) - ord('a') + 1
+            inc total_priority_second_part, ord(group_badge[0]) - ord('a') + 1
 
         elves_group.delete(0..2)
 
-    echo "The answer for the first part is: ", total_priority
+    echo "The answer for the first part is: ", total_priority_first_part
+    echo "The answer for the second part is: ", total_priority_second_part
 
-
-solve_first_part()
-solve_second_part()
+if isMainModule:
+    solve()
 
